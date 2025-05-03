@@ -1,30 +1,53 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-
-class UserCreate(BaseModel):
-    username: str
-    password: str
 
 class UserRead(BaseModel):
     id: int
     username: str
-    first_name = str
-    last_name = str
-    xp: float
-    level: int
+    email: EmailStr
+    first_name: str
+    last_name: str
+    role: str
+    phone_number: str
     plant_stage: str
+    is_active: bool
+
+    class Config:
+        orm_mode = True
+
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    first_name: str
+    last_name: str
+    password: str
+    role: str
+    phone_number: str
+    plant_stage: str = "seed"
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    password: Optional[str] = None
+    role: Optional[str] = None
+    phone_number: Optional[str] = None
+    is_active: Optional[bool] = None
+    plant_stage: Optional[str] = None
 
     class Config:
         orm_mode = True
 
 class EcoActionCreate(BaseModel):
+    user_id: int
     description: str
     green_score: float
     xp_earned: float
 
 class EcoActionRead(BaseModel):
     id: int
+    user_id: int
     description: str
     green_score: float
     xp_earned: float

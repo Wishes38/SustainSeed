@@ -1,23 +1,57 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Text, DateTime
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Text, DateTime, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base  # database.py içinde SQLAlchemy Base tanımı olduğunu varsayıyorum
+from app.database import Base
+import enum
+
+class PlantStageEnum(enum.Enum):
+    seed = "seed"
+    seedling = "seedling"
+    seedling_with_leaves = "seedling_with_leaves"
+    young_tree = "young_tree"
+    growing_tree = "growing_tree"
+    mature_tree = "mature_tree"
+
+class MoodEnum(enum.Enum):
+    happy = "happy"
+    sad = "sad"
+    neutral = "neutral"
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
+    username = Column(String(50), unique=True, index=True)
+    email = Column(String(255), unique=True, index=True)
     hashed_password = Column(String)
     first_name = Column(String)
     last_name = Column(String)
+    phone_number = Column(String(20))
+    role = Column(String)
+    is_active = Column(Boolean, default=True)
     xp = Column(Float, default=0.0)
     level = Column(Integer, default=1)
-    plant_stage = Column(String, default="seed")  # seed / sprout / flower
+    plant_stage = Column(Enum(PlantStageEnum), default=PlantStageEnum.seed)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     actions = relationship("EcoAction", back_populates="user")
     tasks = relationship("UserTaskLog", back_populates="user")
 
+    @property
+    def plant_stage(self):
+        if self.xp < 10:
+            return PlantStageEnum.seed
+        elif self.xp < 20:
+            return PlantStageEnum.seedling
+        elif self.xp < 35:
+            return PlantStageEnum.seedling_with_leaves
+        elif self.xp < 50:
+            return PlantStageEnum.young_tree
+        elif self.xp < 80:
+            return PlantStageEnum.growing_tree
+        else:
+            return PlantStageEnum.mature_tree
 
 class EcoAction(Base):
     __tablename__ = "eco_actions"
@@ -61,5 +95,5 @@ class PlantPersona(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    mood = Column(String)  # happy / sad / neutral
+    mood = Column(Enum(MoodEnum), default=MoodEnum.neutral)
     motivational_quote = Column(String)
