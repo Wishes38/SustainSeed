@@ -11,28 +11,28 @@ def hash_password(password: str) -> str:
 
 
 def create_user(db: Session, user: UserCreate) -> User:
+    if db.query(User).filter(User.username == user.username).first():
+        return None
+
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        hashed_password=hash_password(user.password),
+        role=user.role,
+        phone_number=user.phone_number
+    )
+    db.add(db_user)
     try:
-        db_user = db.query(User).filter(User.username == user.username).first()
-        if db_user:
-            return None
-
-        db_user = User(
-            username=user.username,
-            email=user.email,
-            first_name=user.first_name,
-            last_name=user.last_name,
-            hashed_password=hash_password(user.password),
-            role=user.role,
-            phone_number=user.phone_number
-        )
-
-        db.add(db_user)
         db.commit()
         db.refresh(db_user)
         return db_user
     except Exception as e:
-        print(f"Error while creating user: {e}")
-        return None
+        db.rollback()
+        print(f"[ERROR] create_user commit failed: {e}")
+        raise
+
 
 
 def get_user(db: Session, user_id: int) -> User:

@@ -22,7 +22,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@router.post("/", response_model=UserCreate, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user_route(user: UserCreate, db: db_dependency):
     db_user = crud_create_user(db, user)
     print(f"AAAAAAAAAAAAAAABBBBBBB:  {db_user}")
@@ -31,13 +31,13 @@ def create_user_route(user: UserCreate, db: db_dependency):
     return db_user
 
 
-@router.get("/", response_model=List[UserRead])
+@router.get("/")
 def get_users_route(db: db_dependency, skip: int = 0, limit: int = 100):
     users = get_users(db, skip, limit)
     return users
 
 
-@router.get("/{user_id}", response_model=UserRead)
+@router.get("/{user_id}")
 def get_user_route(user_id: int, db: db_dependency):
     db_user = get_user(db, user_id)
     if db_user is None:
@@ -45,7 +45,7 @@ def get_user_route(user_id: int, db: db_dependency):
     return db_user
 
 
-@router.put("/{user_id}", response_model=UserUpdate)
+@router.put("/{user_id}")
 def update_user_route(user_id: int, user: UserUpdate, db: db_dependency):
     db_user = update_user(db, user_id, user)
     if db_user is None:

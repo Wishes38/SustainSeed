@@ -5,7 +5,6 @@ from app.routers.user import router as user_router
 
 app = FastAPI()
 
-
 @app.get("/")
 async def hello_world():
     return {"message": "Hello World"}
