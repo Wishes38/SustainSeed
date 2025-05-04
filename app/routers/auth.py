@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import Annotated
 from app.database import SessionLocal
 from app.models import User
-from app.schemas import CreateUserRequest, Token
+from app.schemas import CreateUserRequest, Token, UserUpdate, UserRead
 from app.core.auth import (
     hash_password,
     verify_password,
@@ -17,9 +17,10 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
+# === Dependencies ===
 def get_db():
     db = SessionLocal()
     try:
@@ -29,8 +30,10 @@ def get_db():
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
+current_user_dependency = Annotated[dict, Depends(lambda token: decode_access_token(token))]
 
 
+# === Register ===
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register_user(user_data: CreateUserRequest, db: db_dependency):
     existing_user = db.query(User).filter(
@@ -55,7 +58,8 @@ def register_user(user_data: CreateUserRequest, db: db_dependency):
     return {"message": "User registered successfully."}
 
 
-@router.post("/token", response_model=Token)
+# === Login ===
+@router.post("/login", response_model=Token)
 def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
     user = db.query(User).filter(User.username == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
@@ -69,11 +73,42 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.get("/me")
-def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+# === Get Current User Info ===
+@router.get("/me", response_model=UserRead)
+def get_current_user_info(token: Annotated[str, Depends(oauth2_scheme)], db: db_dependency):
     payload = decode_access_token(token)
-    return {
-        "username": payload.get("sub"),
-        "user_id": payload.get("id"),
-        "role": payload.get("role")
-    }
+    user = db.query(User).filter(User.id == payload.get("id")).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+# === Update Current User Info ===
+@router.put("/me", response_model=UserRead)
+def update_current_user_info(
+    user_update: UserUpdate,
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: db_dependency
+):
+    payload = decode_access_token(token)
+    user = db.query(User).filter(User.id == payload.get("id")).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    for attr, value in user_update.dict(exclude_unset=True).items():
+        setattr(user, attr, value)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+# === Delete Current User ===
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
+def delete_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: db_dependency):
+    payload = decode_access_token(token)
+    user = db.query(User).filter(User.id == payload.get("id")).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(user)
+    db.commit()
+    return {"detail": "User deleted"}

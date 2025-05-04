@@ -44,7 +44,7 @@ class UserUpdate(BaseModel):
 class CreateUserRequest(BaseModel):
     username: str
     password: str
-    email: str
+    email: EmailStr
     first_name: str
     last_name: str
     role: str
