@@ -18,16 +18,6 @@ class UserRead(BaseModel):
         orm_mode = True
 
 
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-    first_name: str
-    last_name: str
-    role: str
-    phone_number: str
-
-
 class UserUpdate(BaseModel):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
@@ -56,7 +46,6 @@ class Token(BaseModel):
 
 
 class EcoActionCreate(BaseModel):
-    user_id: int
     description: str
     green_score: float
     xp_earned: float

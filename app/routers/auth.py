@@ -86,9 +86,9 @@ def get_current_user_info(token: Annotated[str, Depends(oauth2_scheme)], db: db_
 # === Update Current User Info ===
 @router.put("/me", response_model=UserRead)
 def update_current_user_info(
-    user_update: UserUpdate,
-    token: Annotated[str, Depends(oauth2_scheme)],
-    db: db_dependency
+        user_update: UserUpdate,
+        token: Annotated[str, Depends(oauth2_scheme)],
+        db: db_dependency
 ):
     payload = decode_access_token(token)
     user = db.query(User).filter(User.id == payload.get("id")).first()
@@ -115,8 +115,9 @@ def delete_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: db_de
 
 
 @router.post("/update-xp")
-def update_user_xp(xp_amount: float, db: db_dependency, token_data: current_user_dependency = Depends()):
-    user = db.query(User).filter(User.id == token_data["id"]).first()
+def update_user_xp(xp_amount: float, db: db_dependency, token: Annotated[str, Depends(oauth2_scheme)]):
+    payload = decode_access_token(token)
+    user = db.query(User).filter(User.id == payload.get("id")).first()
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
@@ -133,4 +134,3 @@ def update_user_xp(xp_amount: float, db: db_dependency, token_data: current_user
         "plant_stage": user.plant_stage.value,
         "tree_count": user.tree_count
     }
-
