@@ -32,6 +32,7 @@ class User(Base):
     xp = Column(Float, default=0.0)
     level = Column(Integer, default=1)
     plant_stage = Column(Enum(PlantStageEnum), default=PlantStageEnum.seed)
+    tree_count = Column(Integer, default=0)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
@@ -51,6 +52,8 @@ class User(Base):
         elif self.xp < 80:
             return PlantStageEnum.growing_tree
         else:
+            self.tree_count += 1
+            self.xp = 0
             return PlantStageEnum.mature_tree
 
 class EcoAction(Base):
