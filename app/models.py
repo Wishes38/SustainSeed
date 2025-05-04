@@ -26,7 +26,6 @@ class User(Base):
     role = Column(String(30))
     is_active = Column(Boolean, default=True)
     xp = Column(Float, default=0.0)
-    level = Column(Integer, default=1)
     plant_stage = Column(Enum(PlantStageEnum), default=PlantStageEnum.seed)
     tree_count = Column(Integer, default=0)
 
@@ -57,23 +56,25 @@ class EcoAction(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
+    title = Column(Text)
     description = Column(Text)
-    green_score = Column(Float)
     xp_earned = Column(Float)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="actions")
+    eco_action_logs = relationship("UserTaskLog", back_populates="eco_action_task")
 
 
 class DailyTask(Base):
     __tablename__ = "daily_tasks"
 
     id = Column(Integer, primary_key=True, index=True)
+    title = Column(Text)
     description = Column(String)
     green_score_estimate = Column(Float)
     active = Column(Boolean, default=True)
 
-    logs = relationship("UserTaskLog", back_populates="task")
+    daily_logs = relationship("UserTaskLog", back_populates="daily_task")
 
 
 class UserTaskLog(Base):
@@ -81,9 +82,11 @@ class UserTaskLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    task_id = Column(Integer, ForeignKey("daily_tasks.id"))
+    daily_tasks = Column(Integer, ForeignKey("daily_task.id"))
+    eco_action_id = Column(Integer, ForeignKey("eco_actions.id"))
     completed = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="tasks")
-    task = relationship("DailyTask", back_populates="logs")
+    daily_task = relationship("DailyTask", back_populates="daily_logs")
+    eco_action_task = relationship("EcoAction", back_populates="eco_action_logs")
