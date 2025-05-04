@@ -12,22 +12,18 @@ class PlantStageEnum(enum.Enum):
     growing_tree = "growing_tree"
     mature_tree = "mature_tree"
 
-class MoodEnum(enum.Enum):
-    happy = "happy"
-    sad = "sad"
-    neutral = "neutral"
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     username = Column(String(50), unique=True, index=True)
     email = Column(String(255), unique=True, index=True)
     hashed_password = Column(String)
-    first_name = Column(String)
-    last_name = Column(String)
+    first_name = Column(String(30))
+    last_name = Column(String(30))
     phone_number = Column(String(20))
-    role = Column(String)
+    role = Column(String(30))
     is_active = Column(Boolean, default=True)
     xp = Column(Float, default=0.0)
     level = Column(Integer, default=1)
@@ -39,22 +35,22 @@ class User(Base):
     actions = relationship("EcoAction", back_populates="user")
     tasks = relationship("UserTaskLog", back_populates="user")
 
-    @property
-    def computed_plant_stage(self):
-        if self.xp < 10:
-            return PlantStageEnum.seed
-        elif self.xp < 20:
-            return PlantStageEnum.seedling
-        elif self.xp < 35:
-            return PlantStageEnum.seedling_with_leaves
-        elif self.xp < 50:
-            return PlantStageEnum.young_tree
-        elif self.xp < 80:
-            return PlantStageEnum.growing_tree
-        else:
+    def update_plant_stage(self):
+        while self.xp >= 80:
             self.tree_count += 1
-            self.xp = 0
-            return PlantStageEnum.mature_tree
+            self.xp -= 80
+
+        if self.xp < 10:
+            self.plant_stage = PlantStageEnum.seed
+        elif self.xp < 20:
+            self.plant_stage = PlantStageEnum.seedling
+        elif self.xp < 35:
+            self.plant_stage = PlantStageEnum.seedling_with_leaves
+        elif self.xp < 50:
+            self.plant_stage = PlantStageEnum.young_tree
+        elif self.xp < 80:
+            self.plant_stage = PlantStageEnum.growing_tree
+
 
 class EcoAction(Base):
     __tablename__ = "eco_actions"
@@ -91,12 +87,3 @@ class UserTaskLog(Base):
 
     user = relationship("User", back_populates="tasks")
     task = relationship("DailyTask", back_populates="logs")
-
-
-class PlantPersona(Base):
-    __tablename__ = "plant_personas"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    mood = Column(Enum(MoodEnum), default=MoodEnum.neutral)
-    motivational_quote = Column(String)

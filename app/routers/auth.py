@@ -112,3 +112,25 @@ def delete_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: db_de
     db.delete(user)
     db.commit()
     return {"detail": "User deleted"}
+
+
+@router.post("/update-xp")
+def update_user_xp(xp_amount: float, db: db_dependency, token_data: current_user_dependency = Depends()):
+    user = db.query(User).filter(User.id == token_data["id"]).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    user.xp += xp_amount
+    user.update_plant_stage()
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "XP updated successfully.",
+        "new_xp": user.xp,
+        "plant_stage": user.plant_stage.value,
+        "tree_count": user.tree_count
+    }
+
