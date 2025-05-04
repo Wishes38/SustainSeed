@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
+
 class UserRead(BaseModel):
     id: int
     username: str
@@ -16,6 +17,7 @@ class UserRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 class UserCreate(BaseModel):
     username: str
     password: str
@@ -24,6 +26,7 @@ class UserCreate(BaseModel):
     last_name: str
     role: str
     phone_number: str
+
 
 class UserUpdate(BaseModel):
     username: Optional[str] = None
@@ -37,11 +40,27 @@ class UserUpdate(BaseModel):
     class Config:
         orm_mode = True
 
+
+class CreateUserRequest(BaseModel):
+    username: str
+    password: str
+    email: str
+    first_name: str
+    last_name: str
+    role: str
+    phone_number: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 class EcoActionCreate(BaseModel):
     user_id: int
     description: str
     green_score: float
     xp_earned: float
+
 
 class EcoActionRead(BaseModel):
     id: int
@@ -54,6 +73,7 @@ class EcoActionRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 class DailyTaskRead(BaseModel):
     id: int
     description: str
@@ -61,6 +81,7 @@ class DailyTaskRead(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class UserTaskLogRead(BaseModel):
     id: int
@@ -70,6 +91,7 @@ class UserTaskLogRead(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class PlantPersonaRead(BaseModel):
     id: int
