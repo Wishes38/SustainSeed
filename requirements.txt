@@ -7,3 +7,4 @@ alembic==1.15.2
 passlib==1.7.4
 email-validator==2.1.0.post1
 bcrypt==5.1.1
+alembic==1.13.2
