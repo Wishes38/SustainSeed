@@ -46,6 +46,7 @@ class Token(BaseModel):
 
 
 class EcoActionCreate(BaseModel):
+    title: str
     description: str
     xp_earned: float
 
@@ -53,6 +54,7 @@ class EcoActionCreate(BaseModel):
 class EcoActionRead(BaseModel):
     id: int
     user_id: int
+    title: str
     description: str
     xp_earned: float
     created_at: datetime

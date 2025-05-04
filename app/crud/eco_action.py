@@ -6,8 +6,8 @@ from app.schemas import EcoActionCreate
 def create_eco_action(db: Session, user_id: int, action_data: EcoActionCreate) -> EcoAction:
     eco_action = EcoAction(
         user_id=user_id,
+        title=action_data.title,
         description=action_data.description,
-        green_score=action_data.green_score,
         xp_earned=action_data.xp_earned,
     )
     db.add(eco_action)
