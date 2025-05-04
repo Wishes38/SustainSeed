@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models import User
 from app.schemas import UserCreate, UserUpdate
@@ -11,8 +12,15 @@ def hash_password(password: str) -> str:
 
 
 def create_user(db: Session, user: UserCreate) -> User:
-    if db.query(User).filter(User.username == user.username).first():
-        return None
+    existing_user = db.query(User).filter(
+        (User.username == user.username) | (User.email == user.email)
+    ).first()
+
+    if existing_user:
+        if existing_user.username == user.username:
+            raise HTTPException(status_code=400, detail="Username already registered")
+        if existing_user.email == user.email:
+            raise HTTPException(status_code=400, detail="Email already registered")
 
     db_user = User(
         username=user.username,
@@ -34,7 +42,6 @@ def create_user(db: Session, user: UserCreate) -> User:
         raise
 
 
-
 def get_user(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
@@ -46,6 +53,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def update_user(db: Session, user_id: int, user: UserUpdate) -> User:
     db_user = db.query(User).filter(User.id == user_id).first()
     if db_user:
+        if user.username:
+            db_user.username = user.username
         if user.email:
             db_user.email = user.email
         if user.first_name:
@@ -53,13 +62,11 @@ def update_user(db: Session, user_id: int, user: UserUpdate) -> User:
         if user.last_name:
             db_user.last_name = user.last_name
         if user.password:
-            db_user.hashed_password = hash_password(user.password)  # Şifreyi hash'liyoruz
+            db_user.hashed_password = hash_password(user.password)
         if user.role:
             db_user.role = user.role
         if user.phone_number:
             db_user.phone_number = user.phone_number
-        if user.is_active is not None:
-            db_user.is_active = user.is_active
 
         db.commit()
         db.refresh(db_user)

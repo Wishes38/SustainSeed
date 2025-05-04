@@ -25,9 +25,8 @@ db_dependency = Annotated[Session, Depends(get_db)]
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user_route(user: UserCreate, db: db_dependency):
     db_user = crud_create_user(db, user)
-    print(f"AAAAAAAAAAAAAAABBBBBBB:  {db_user}")
     if not db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=400, detail="User creation failed.")
     return db_user
 
 

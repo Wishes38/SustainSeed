@@ -18,23 +18,21 @@ class UserRead(BaseModel):
 
 class UserCreate(BaseModel):
     username: str
+    password: str
     email: EmailStr
     first_name: str
     last_name: str
-    password: str
     role: str
     phone_number: str
-    plant_stage: str = "seed"
 
 class UserUpdate(BaseModel):
+    username: Optional[str] = None
     email: Optional[EmailStr] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     password: Optional[str] = None
     role: Optional[str] = None
     phone_number: Optional[str] = None
-    is_active: Optional[bool] = None
-    plant_stage: Optional[str] = None
 
     class Config:
         orm_mode = True

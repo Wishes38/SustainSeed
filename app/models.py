@@ -40,7 +40,7 @@ class User(Base):
     tasks = relationship("UserTaskLog", back_populates="user")
 
     @property
-    def plant_stage(self):
+    def computed_plant_stage(self):
         if self.xp < 10:
             return PlantStageEnum.seed
         elif self.xp < 20:
