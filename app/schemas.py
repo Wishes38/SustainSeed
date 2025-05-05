@@ -54,8 +54,8 @@ class EcoActionCreate(BaseModel):
 class EcoActionRead(BaseModel):
     id: int
     user_id: int
-    title: str
-    description: str
+    title: Optional[str]
+    description: Optional[str]
     xp_earned: float
     created_at: datetime
 
@@ -63,38 +63,9 @@ class EcoActionRead(BaseModel):
         orm_mode = True
 
 
-class DailyTaskBase(BaseModel):
+class DailyTaskCreate(BaseModel):
     title: str
-    description: Optional[str] = None
-    active: Optional[bool] = True
+    description: str
+    xp_earned: float
 
-class DailyTaskCreate(DailyTaskBase):
-    pass
-
-class DailyTaskUpdate(DailyTaskBase):
-    pass
-
-class DailyTaskOut(DailyTaskBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-class DailyTaskRead(BaseModel):
-    id: int
-    title: str
-    description: Optional[str] = None
-    active: bool
-
-    class Config:
-        orm_mode = True
-
-class UserTaskLogRead(BaseModel):
-    id: int
-    completed: bool
-    created_at: datetime
-    task: DailyTaskRead
-
-    class Config:
-        orm_mode = True
 

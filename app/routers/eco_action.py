@@ -7,7 +7,6 @@ from app.core.auth import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
 from app.crud import eco_action as eco_action_crud
 
-
 router = APIRouter(
     prefix="/eco-actions",
     tags=["Eco Actions"]
@@ -26,9 +25,9 @@ def get_db():
 
 @router.post("/", response_model=EcoActionRead)
 def create_action(
-    action_data: EcoActionCreate,
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+        action_data: EcoActionCreate,
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
     if not user_data or "id" not in user_data:
@@ -39,11 +38,28 @@ def create_action(
 
 @router.get("/", response_model=List[EcoActionRead])
 def get_my_eco_actions(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
     if not user_data or "id" not in user_data:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
     return eco_action_crud.get_eco_actions_by_user(db, user_id=user_data["id"])
+
+
+@router.post("/{eco_action_id}/complete")
+def complete_eco_action(
+        eco_action_id: int,
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
+):
+    user_data = decode_access_token(token)
+    if not user_data or "id" not in user_data:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+    success = eco_action_crud.complete_eco_action(db, user_id=user_data["id"], eco_action_id=eco_action_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Task not found or already completed")
+
+    return {"message": "Eco action marked as completed and XP awarded"}

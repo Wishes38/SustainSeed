@@ -33,6 +33,7 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     actions = relationship("EcoAction", back_populates="user")
+    assigned_tasks = relationship("UserDailyTaskAssignment", back_populates="user")
     tasks = relationship("UserTaskLog", back_populates="user")
 
     def update_plant_stage(self):
@@ -74,8 +75,9 @@ class DailyTask(Base):
     description = Column(String)
     xp_earned = Column(Float)
     active = Column(Boolean, default=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
 
-    daily_logs = relationship("UserTaskLog", back_populates="daily_task")
+    assignments = relationship("UserDailyTaskAssignment", back_populates="daily_task")
 
 
 class UserTaskLog(Base):
@@ -83,11 +85,22 @@ class UserTaskLog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    daily_task_id = Column(Integer, ForeignKey("daily_tasks.id"))
-    eco_action_id = Column(Integer, ForeignKey("eco_actions.id"))
+    eco_action_id = Column(Integer, ForeignKey("eco_actions.id"))  # sadece eco_action
     completed = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="tasks")
-    daily_task = relationship("DailyTask", back_populates="daily_logs")
     eco_action_task = relationship("EcoAction", back_populates="eco_action_logs")
+
+
+class UserDailyTaskAssignment(Base):
+    __tablename__ = "user_daily_task_assignments"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    daily_task_id = Column(Integer, ForeignKey("daily_tasks.id"))
+    completed = Column(Boolean, default=False)
+    assigned_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    user = relationship("User", back_populates="assigned_tasks")
+    daily_task = relationship("DailyTask", back_populates="assignments")
