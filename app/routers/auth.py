@@ -20,7 +20,6 @@ router = APIRouter(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-# === Dependencies ===
 def get_db():
     db = SessionLocal()
     try:

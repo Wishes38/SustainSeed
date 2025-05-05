@@ -63,14 +63,31 @@ class EcoActionRead(BaseModel):
         orm_mode = True
 
 
-class DailyTaskRead(BaseModel):
+class DailyTaskBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+    active: Optional[bool] = True
+
+class DailyTaskCreate(DailyTaskBase):
+    pass
+
+class DailyTaskUpdate(DailyTaskBase):
+    pass
+
+class DailyTaskOut(DailyTaskBase):
     id: int
-    description: str
-    green_score_estimate: float
 
     class Config:
         orm_mode = True
 
+class DailyTaskRead(BaseModel):
+    id: int
+    title: str
+    description: Optional[str] = None
+    active: bool
+
+    class Config:
+        orm_mode = True
 
 class UserTaskLogRead(BaseModel):
     id: int
@@ -81,12 +98,3 @@ class UserTaskLogRead(BaseModel):
     class Config:
         orm_mode = True
 
-
-class PlantPersonaRead(BaseModel):
-    id: int
-    name: str
-    mood: str
-    motivational_quote: str
-
-    class Config:
-        orm_mode = True
