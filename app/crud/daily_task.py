@@ -1,14 +1,15 @@
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+from datetime import datetime, UTC
 from app.models import DailyTask, UserDailyTaskAssignment, User
 from app.schemas import DailyTaskCreate
+from sqlalchemy import cast, Date
 
 
 def create_daily_task(db: Session, task_data: DailyTaskCreate) -> DailyTask:
     new_task = DailyTask(
         title=task_data.title,
         description=task_data.description,
-        xp_earned=7.0  # Sabit XP değeri
+        xp_earned=7.0
     )
     db.add(new_task)
     db.commit()
@@ -17,7 +18,7 @@ def create_daily_task(db: Session, task_data: DailyTaskCreate) -> DailyTask:
 
 
 def delete_daily_task(db: Session, task_id: int):
-    task = db.query(DailyTask).get(task_id)
+    task = db.get(DailyTask, task_id)
     if task:
         db.delete(task)
         db.commit()
@@ -28,23 +29,32 @@ def get_all_daily_tasks(db: Session):
 
 
 def assign_tasks_to_user(db: Session, user_id: int):
-    today = datetime.utcnow().date()
+    today = datetime.now(UTC).date()
+    now = datetime.now(UTC)
 
-    already_assigned = db.query(UserDailyTaskAssignment).filter(
-        UserDailyTaskAssignment.user_id == user_id,
-        UserDailyTaskAssignment.assigned_at >= today
-    ).count()
-
-    if already_assigned == 0:
+    try:
         tasks = db.query(DailyTask).filter(DailyTask.active == True).all()
         for task in tasks:
-            assignment = UserDailyTaskAssignment(
-                user_id=user_id,
-                daily_task_id=task.id,
-                completed=False
-            )
-            db.add(assignment)
+            already_assigned = db.query(UserDailyTaskAssignment).filter(
+                UserDailyTaskAssignment.user_id == user_id,
+                UserDailyTaskAssignment.daily_task_id == task.id,
+                cast(UserDailyTaskAssignment.assigned_at, Date) == today
+            ).first()
+
+            if not already_assigned:
+                assignment = UserDailyTaskAssignment(
+                    user_id=user_id,
+                    daily_task_id=task.id,
+                    completed=False,
+                    assigned_at=now
+                )
+                db.add(assignment)
+
         db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error assigning tasks: {e}")
 
 
 def get_user_assignments(db: Session, user_id: int):

@@ -87,10 +87,10 @@ class DailyTaskRead(BaseModel):
 
 class AssignmentRead(BaseModel):
     id: int
-    daily_task_id: int
+    daily_task_id: Optional[int]
     completed: bool
     assigned_at: datetime
-    daily_task: DailyTaskRead
+    daily_task: Optional[DailyTaskRead]
 
     class Config:
         orm_mode = True
