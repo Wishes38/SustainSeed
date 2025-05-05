@@ -40,6 +40,7 @@ class CreateUserRequest(BaseModel):
     role: str
     phone_number: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -63,9 +64,33 @@ class EcoActionRead(BaseModel):
         orm_mode = True
 
 
-class DailyTaskCreate(BaseModel):
+class DailyTaskBase(BaseModel):
     title: str
     description: str
     xp_earned: float
 
 
+class DailyTaskCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+
+class DailyTaskRead(BaseModel):
+    id: int
+    title: str
+    description: Optional[str]
+    xp_earned: float
+
+    class Config:
+        orm_mode = True
+
+
+class AssignmentRead(BaseModel):
+    id: int
+    daily_task_id: int
+    completed: bool
+    assigned_at: datetime
+    daily_task: DailyTaskRead
+
+    class Config:
+        orm_mode = True

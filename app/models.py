@@ -60,7 +60,7 @@ class EcoAction(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     title = Column(Text)
     description = Column(Text)
-    xp_earned = Column(Float)
+    xp_earned = Column(Float, nullable=False, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="actions")
@@ -73,7 +73,7 @@ class DailyTask(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(Text)
     description = Column(String)
-    xp_earned = Column(Float)
+    xp_earned = Column(Float, nullable=False, default=7.0)
     active = Column(Boolean, default=True)
     user_id = Column(Integer, ForeignKey("users.id"))
 
