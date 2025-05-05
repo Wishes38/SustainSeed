@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from typing import Annotated
 from app.database import SessionLocal
@@ -11,11 +12,25 @@ from app.core.auth import (
     create_access_token,
     decode_access_token
 )
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
+
+templates = Jinja2Templates(directory="app/templates")
+
+
+@router.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
+@router.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -32,7 +47,6 @@ db_dependency = Annotated[Session, Depends(get_db)]
 current_user_dependency = Annotated[dict, Depends(lambda token: decode_access_token(token))]
 
 
-# === Register ===
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register_user(user_data: CreateUserRequest, db: db_dependency):
     existing_user = db.query(User).filter(
@@ -133,3 +147,10 @@ def update_user_xp(xp_amount: float, db: db_dependency, token: Annotated[str, De
         "plant_stage": user.plant_stage.value,
         "tree_count": user.tree_count
     }
+
+@router.get("/logout")
+async def logout():
+    response = RedirectResponse(url="/auth/login")
+
+    response.delete_cookie(key="access_token", path="/")
+    return response

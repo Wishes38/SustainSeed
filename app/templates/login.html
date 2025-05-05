@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Giriş Yap{% endblock %}
+
+{% block content %}
+  <h2>Giriş Yap</h2>
+  <form id="login-form">
+    <label>Username:</label>
+    <input type="text" name="username" required />
+
+    <label>Password:</label>
+    <input type="password" name="password" required />
+
+    <button type="submit">Giriş Yap</button>
+  </form>
+
+  <p>Hesabın yok mu? <a href="/auth/register">Kayıt Ol</a></p>
+  <div id="login-msg"></div>
+
+  <script src="{{ url_for('static', path='js/auth.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | Susseedai{% endblock %}
+
+{% block content %}
+<header style="display:flex; justify-content: space-between; align-items: center;">
+    <h2>Hoş geldin, {{ user.name }}!</h2>
+    <form action="/auth/logout" method="get" style="margin:0;">
+        <button type="submit">Çıkış Yap</button>
+    </form>
+</header>
+
+<p>XP seviyen: {{ user.xp }}</p>
+<p>Tür: {{ request.url.path }}</p>
+{% endblock %}

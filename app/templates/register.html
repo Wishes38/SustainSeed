@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt Ol{% endblock %}
+
+{% block content %}
+  <h2>Kayıt Ol</h2>
+  <form id="register-form">
+    <label>Username:</label>
+    <input type="text" name="username" required />
+
+    <label>Email:</label>
+    <input type="email" name="email" required />
+
+    <label>First Name:</label>
+    <input type="text" name="first_name" required />
+
+    <label>Last Name:</label>
+    <input type="text" name="last_name" required />
+
+    <label>Password:</label>
+    <input type="password" name="password" required />
+
+    <label>Role:</label>
+    <input type="text" name="role" value="user" required />
+
+    <label>Phone Number:</label>
+    <input type="text" name="phone_number" required />
+
+    <button type="submit">Kayıt Ol</button>
+  </form>
+
+  <p>Zaten hesabınız var mı? <a href="/auth/login">Giriş Yap</a></p>
+  <div id="register-msg"></div>
+
+  <script src="{{ url_for('static', path='js/auth.js') }}"></script>
+{% endblock %}
