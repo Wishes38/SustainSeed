@@ -257,6 +257,12 @@ button {
   justify-content:center;
 }
 
+.hp-tree{
+  flex: 1;
+  display: flex;
+  align-items: end;
+}
+
 .hp-xp-bar {
   position: absolute;
   top: 20px;
@@ -281,14 +287,12 @@ button {
   font-size: 0.9rem;
 }
 
-.hp-tree img {
-  max-height: 300px;
-}
-
 .hp-bottom-container{
   display: flex;
   flex-direction: column;
   width: 50%;
+  flex: 1;
+  align-items: start;
 }
 
 .hp-subtitle {
@@ -305,6 +309,7 @@ button {
   background: #ececec;
   border-radius: 24px;
   padding: 8px 12px;
+  width: 100%;
 }
 
 .hp-search input {

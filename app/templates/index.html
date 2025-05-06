@@ -10,12 +10,48 @@
             <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
         </div>
 
+        {% if user.xp < 10 %}
+        {% set img_index = 1 %}
+        {% elif user.xp < 20 %}
+        {% set img_index = 2 %}
+        {% elif user.xp < 35 %}
+        {% set img_index = 3 %}
+        {% elif user.xp < 50 %}
+        {% set img_index = 4 %}
+        {% elif user.xp < 80 %}
+        {% set img_index = 5 %}
+        {% else %}
+        {% set img_index = 6 %}
+        {% endif %}
+
+        {% if img_index == 1 %}
+        {% set maxh = 50 %}
+        {% elif img_index == 2 %}
+        {% set maxh = 100 %}
+        {% elif img_index == 3 %}
+        {% set maxh = 150 %}
+        {% elif img_index == 4 %}
+        {% set maxh = 225 %}
+        {% elif img_index == 5 %}
+        {% set maxh = 325 %}
+        {% else %}
+        {% set maxh = 400 %}
+        {% endif %}
+
         <div class="hp-tree">
             <img
-                    src="{{ url_for('static', path='images/trees/' ~ user.plant_stage ~ '.png') }}"
-                    alt="{{ user.plant_stage }}"
+                    src="{{ url_for('static', path='images/' ~ img_index ~ '.png') }}"
+                    alt="Stage {{ img_index }}"
+                    style="max-height: {{ maxh }}px;"
             />
         </div>
+
+        {% if user.xp >= 80 %}
+        <form method="post" action="{{ url_for('update_user_xp') }}?xp_amount=0" class="complete-form">
+            <button type="submit" class="complete-btn">Tamamla</button>
+        </form>
+        {% endif %}
+
         <div class="hp-bottom-container">
             <p class="hp-subtitle">
                 My photosynthesis is going great; turn off the light and I’ll really thrive.
