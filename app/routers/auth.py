@@ -150,3 +150,8 @@ async def logout():
     response = RedirectResponse(url="/auth/login")
     response.delete_cookie(key="access_token", path="/")
     return response
+
+@router.get("/profile", response_class=HTMLResponse)
+async def profile_page(request: Request):
+    return templates.TemplateResponse("profile.html", {"request": request})
+

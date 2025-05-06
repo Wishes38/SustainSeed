@@ -539,3 +539,83 @@ button {
 }
 
 
+
+
+.profile-card {
+  background: #fffffa;
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 480px;
+  margin: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-card h2 {
+  margin-bottom: 24px;
+  color: #102f33;
+}
+
+.profile-card label {
+  display: block;
+  margin-top: 16px;
+  font-weight: 600;
+  color: #26403b;
+}
+
+.profile-card input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.hp-profile-msg {
+  margin: 16px 0;
+  font-size: 0.9rem;
+}
+
+.hp-btn {
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-right: 10px;
+  border: none;
+}
+
+.hp-btn-primary {
+  background-color: #c0d274;
+  color: #102f33;
+  width: 100%;
+}
+
+.hp-btn-secondary {
+  background-color: #ccc;
+  color: #102f33;
+}
+
+.hp-btn-primary:hover {
+  background-color: #b3c166;
+}
+
+.hp-btn-secondary:hover {
+  background-color: #b3b3b3;
+}
+
+.about-container{
+    padding: 50px 50px 50px 380px;
+    background: #fffffa;
+    height: 100vh;
+}
+
+.about-title{
+  color: #808080;
+}
+
+.about-description{
+  color: #808080;
+  text-align: justify;
+}
+
+
