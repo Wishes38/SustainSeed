@@ -59,13 +59,6 @@
         </div>
         <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
 
-
-{% if user.xp >= 80 %}
-<form method="post" action="{{ url_for('update_user_xp') }}?xp_amount=0" class="complete-form">
-    <button type="submit" class="complete-btn">Tamamla</button>
-</form>
-{% endif %}
-
 <div class="hp-bottom-container">
     <p class="hp-subtitle">
          Fotosentezim harika gidiyor; ışığı kapatınca daha da iyi olacağım.

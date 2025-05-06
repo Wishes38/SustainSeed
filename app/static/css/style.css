@@ -452,7 +452,7 @@ button {
   background-color: #f1f2f6;
   padding: 25px;
   border-radius: 20px;
-  width: 300px;
+  width: 40%;
 }
 
 .task-group-header {
@@ -522,7 +522,7 @@ button {
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
-  padding: 0;
+  padding: 8px;
   margin-right: 8px;
   transition: background 0.2s ease;
 }

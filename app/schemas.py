@@ -73,6 +73,10 @@ class DailyTaskBase(BaseModel):
 class DailyTaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
+    xp_earned: float = 7.0
+
+    class Config:
+        orm_mode = True
 
 
 class DailyTaskRead(BaseModel):
@@ -94,6 +98,7 @@ class AssignmentRead(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class UserTaskLogRead(BaseModel):
     id: int

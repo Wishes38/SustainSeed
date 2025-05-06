@@ -3,14 +3,33 @@ from datetime import datetime, UTC
 from app.models import DailyTask, UserDailyTaskAssignment, User
 from app.schemas import DailyTaskCreate
 from sqlalchemy import cast, Date
+from sqlalchemy import cast, Date
+from app.ai.chat_bot import Chat
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+chat_log_bot = []
+chat_log_user = []
+
+chatbot = Chat(GEMINI_API_KEY, "gemini-2.5-flash-preview-04-17", chat_log_bot, chat_log_user)
+
+user_time_frame, user_location, current_time = "Tüm gün içinde yapabileceğim", "Herhangi bir yer olabilir, farketmez.", "Günün herhangi bir vaktinde"
 
 def create_daily_task(db: Session, task_data: DailyTaskCreate) -> DailyTask:
+
+    temp=chatbot.get_response("Bana bir görev ver.",None,user_time_frame, user_location, current_time)
+    print(temp)
     new_task = DailyTask(
-        title=task_data.title,
-        description=task_data.description,
+        title=temp["content"]["title"],
+        description=temp["content"]["description"],
         xp_earned=7.0
     )
+
+    print(new_task)
     db.add(new_task)
     db.commit()
     db.refresh(new_task)

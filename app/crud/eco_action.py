@@ -1,14 +1,29 @@
 from sqlalchemy.orm import Session
 from app.models import EcoAction, User, UserTaskLog
 from app.schemas import EcoActionCreate
+from app.ai.chat_bot import Chat
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+chat_log_bot = []
+chat_log_user = []
+
+chatbot = Chat(GEMINI_API_KEY, "gemini-2.5-flash-preview-04-17", chat_log_bot, chat_log_user)
 
 
 def create_eco_action(db: Session, user_id: int, action_data: EcoActionCreate) -> EcoAction:
+
+    temp = chatbot.get_response("Bana bir görev ver.", None, None, None, None)
+
     eco_action = EcoAction(
         user_id=user_id,
-        title=action_data.title,
-        description=action_data.description,
-        xp_earned=action_data.xp_earned,
+        title=temp["content"]["title"],
+        description=temp["content"]["description"],
+        xp_earned=temp["content"]["xp_earned"],
     )
     db.add(eco_action)
     db.flush()
