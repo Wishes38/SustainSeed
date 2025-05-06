@@ -76,7 +76,7 @@ def register_user(user_data: CreateUserRequest, db: db_dependency):
 def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
     user = db.query(User).filter(User.username == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid username or password")
+        raise HTTPException(status_code=401, detail="Hatalı Kullanıcı Adı yada Şifre")
 
     token = create_access_token({
         "sub": user.username,
@@ -148,9 +148,9 @@ def update_user_xp(xp_amount: float, db: db_dependency, token: Annotated[str, De
         "tree_count": user.tree_count
     }
 
-@router.get("/logout")
+
+@router.get("/logout", name="auth_logout")
 async def logout():
     response = RedirectResponse(url="/auth/login")
-
     response.delete_cookie(key="access_token", path="/")
     return response

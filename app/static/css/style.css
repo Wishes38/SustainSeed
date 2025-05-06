@@ -1,17 +1,17 @@
+/* ─── Global ─── */
 body {
   background-color: #f0f0f0;
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
+
 h2 {
-      color: #2c3e50;
-    }
-form {
-  margin: 20px auto;
-  padding: 10px;
-  background: #fff;
+  color: #2c3e50;
 }
 
+a {
+  text-decoration: none;
+}
 
 button {
   cursor: pointer;
@@ -20,34 +20,29 @@ button {
   border: none;
 }
 
+/* ─── Login Sayfası ─── */
 .login-container {
   background-color: #fff;
   width: 100%;
-  height: 100vh
+  height: 100vh;
 }
 
-.login-max-content{
+.login-max-content {
   display: flex;
   flex-direction: column;
   height: 100%;
   max-width: 100%;
-  margin:auto;
+  margin: auto;
 }
 
-.login-top-bar{
+.login-top-bar {
   height: 75px;
   background-color: #102f33;
-}
-
-.login-bottom-bar {
-  height: 25px;
-  background-color: #102f33;
-}
-.login-top-bar {
   display: flex;
   align-items: center;
   padding: 0 75px;
 }
+
 .login-top-bar-icon {
   height: 46px;
 }
@@ -66,6 +61,7 @@ button {
   padding: 150px 0;
   background: transparent;
 }
+
 .login-left-logo {
   max-width: 50%;
   height: auto;
@@ -78,11 +74,13 @@ button {
   justify-content: center;
   align-items: center;
   padding: 40px;
-  backgrand: transparent;
+  background: transparent;
 }
+
 .login-leaf-icon {
   width: 48px;
 }
+
 .login-title {
   margin: 5px 0 0 0;
   font-weight: 400;
@@ -93,20 +91,22 @@ button {
   max-width: 430px;
   display: flex;
   flex-direction: column;
-  gap: 5px
+  gap: 5px;
 }
+
 .login-label {
   display: block;
-  padding: 0 0 0 7px;
+  padding-left: 7px;
   opacity: 0.5;
   margin-top: 4px;
   font-size: 1em;
 }
+
 .login-input {
   padding: 8px;
   border: 1px solid #132f33;
   border-radius: 5px;
-  height: 25px
+  height: 25px;
 }
 
 .login-options {
@@ -114,6 +114,7 @@ button {
   justify-content: space-between;
   flex-direction: row-reverse;
 }
+
 .login-forgot-link {
   font-size: 0.9em;
   flex: 1;
@@ -122,14 +123,15 @@ button {
   color: black;
   opacity: .5;
 }
+
 .login-remember-me {
   display: flex;
   align-items: center;
 }
 
-.login-remember-me-label{
-    opacity: 0.5;
-    font-size: 0.9em;
+.login-remember-me-label {
+  opacity: 0.5;
+  font-size: 0.9em;
 }
 
 .login-message {
@@ -154,6 +156,158 @@ button {
   background-color: #ccc;
   color: #102f33;
 }
+
 .login-signup-btn:hover {
   background-color: #b3b3b3;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: 315px;
+  height: 100vh;
+  background-color: #102f33;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-left: 30px;
+  padding-top: 60px;
+  box-sizing: border-box;
+  color: #fffffa;
+  z-index: 9999;
+}
+
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 220px;
+  max-height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 120px;
+}
+
+.sidebar-item {
+  width: 95%;
+  height: 55px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #c8cfcc;
+  background-color: transparent;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.sidebar-item:hover {
+  background-color: #c0d274;
+  color: #102f33;
+}
+
+.sidebar-item.selected {
+  background-color: #c0d274;
+  color: #102f33;
+}
+
+.sidebar-icon {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.sidebar a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+
+/* ─── Main (“HP”) İçerik ─── */
+.hp-container {
+  display: flex;
+  margin-left: 315px;
+  height: 100vh;
+}
+
+.hp-content {
+  flex: 1;
+  position: relative;
+  padding: 40px;
+  text-align: center;
+  overflow: auto;
+}
+
+.hp-xp-bar {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  width: 200px;
+  height: 16px;
+  background: #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.hp-xp-fill {
+  height: 100%;
+  background: #26403b;
+  transition: width 0.3s ease-in-out;
+}
+
+.hp-xp-label {
+  position: absolute;
+  top: -24px;
+  right: 0;
+  font-size: 0.9rem;
+}
+
+.hp-tree img {
+  max-height: 300px;
+}
+
+.hp-subtitle {
+  margin-top: 16px;
+  color: #888;
+  font-size: 1rem;
+}
+
+.hp-search {
+  margin-top: 16px;
+  display: inline-flex;
+  background: #ececec;
+  border-radius: 24px;
+  padding: 8px 12px;
+}
+
+.hp-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.hp-search button {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
 }

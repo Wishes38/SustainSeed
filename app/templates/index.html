@@ -1,15 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }} | Susseedai{% endblock %}
+{% block title %}Anasayfa{% endblock %}
 
 {% block content %}
-<header style="display:flex; justify-content: space-between; align-items: center;">
-    <h2>Hoş geldin, {{ user.name }}!</h2>
-    <form action="/auth/logout" method="get" style="margin:0;">
-        <button type="submit">Çıkış Yap</button>
-    </form>
-</header>
+<div class="hp-container">
+    <main class="hp-content">
+        <div class="hp-xp-bar">
+            <div class="hp-xp-fill" style="width: {{ user.percent }}%;"></div>
+            <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
+        </div>
 
-<p>XP seviyen: {{ user.xp }}</p>
-<p>Tür: {{ request.url.path }}</p>
+        <div class="hp-tree">
+            <img
+                    src="{{ url_for('static', path='images/trees/' ~ user.plant_stage ~ '.png') }}"
+                    alt="{{ user.plant_stage }}"
+            />
+        </div>
+
+        <p class="hp-subtitle">
+            My photosynthesis is going great; turn off the light and I’ll really thrive.
+        </p>
+        <div class="hp-search">
+            <input type="text" placeholder="Little sprout, how are you today?"/>
+            <button>🔍</button>
+        </div>
+    </main>
+</div>
 {% endblock %}

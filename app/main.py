@@ -12,6 +12,7 @@ from fastapi.responses import RedirectResponse
 from app.core.auth import decode_access_token
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
+from app.routers.home import router as home_router
 
 templates = Jinja2Templates(directory="app/templates")
 
@@ -33,32 +34,41 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@app.get("/", response_class=templates.TemplateResponse)
-async def home(request: Request, db: db_dependency):
+@app.get("/")
+async def home(request: Request, db: Session = Depends(get_db)):
+    # 1) Cookie’den token
     token = request.cookies.get("access_token")
     if not token:
         return RedirectResponse(url="/auth/login")
-    try:
 
+    # 2) Decode & kullanıcı yükle
+    try:
         payload = decode_access_token(token)
         user_id = payload.get("id")
-
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
-            raise ValueError("Invalid user")
+            raise ValueError("User yok")
     except Exception:
-
         return RedirectResponse(url="/auth/login")
 
-    context = {
+    # 3) xp yüzdesi (0–80 aralığında kalacak şekilde)
+    xp_for_stage = user.xp % 80
+    xp_percent = round(xp_for_stage / 80 * 100)
+
+    return templates.TemplateResponse("index.html", {
         "request": request,
-        "title": "Anasayfa",
-        "user": {"name": user.username, "xp": user.xp}
-    }
-    return templates.TemplateResponse("index.html", context)
+        "user": {
+            "first_name": user.first_name,
+            "xp": user.xp,
+            "percent": xp_percent,
+            "plant_stage": user.plant_stage.value,
+            "tree_count": user.tree_count
+        }
+    })
 
 
 app.include_router(auth_router)
+app.include_router(home_router)
 app.include_router(eco_action_router)
 app.include_router(daily_task_router)
 

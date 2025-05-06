@@ -2,23 +2,76 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <title>{% block title %}FastAPI Uygulama{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
+    />
 
+    <link
+            rel="stylesheet"
+            href="{{ url_for('static', path='css/style.css') }}"
+    />
+
+    {% block extra_css %}{% endblock %}
 </head>
-
 <body>
-<header>
-</header>
+{% block sidebar %}
+<nav class="sidebar">
+    <div class="logo-container">
+        <img
+                src="{{ url_for('static', path='images/logo-sustain-seed-ai-acik-renk.png') }}"
+                alt="Sustain Seed Logo"
+                class="sidebar-logo"
+        />
+    </div>
+    <ul>
+        <li class="sidebar-item{% if request.url.path == url_for('home') %} selected{% endif %}">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', path='images/anasayfa.png') }}" alt="Anasayfa" class="sidebar-icon"/>
+                Anasayfa
+            </a>
+        </li>
+        <li class="sidebar-item{% if request.url.path == url_for('tasks') %} selected{% endif %}">
+            <a href="{{ url_for('tasks') }}">
+                <img src="{{ url_for('static', path='images/tasks.png') }}" alt="Görevler" class="sidebar-icon"/>
+                Görevler
+            </a>
+        </li>
+        <li class="sidebar-item{% if request.url.path == url_for('profile') %} selected{% endif %}">
+            <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', path='images/profile.png') }}" alt="Profil" class="sidebar-icon"/>
+                Profil
+            </a>
+        </li>
 
+        <li class="sidebar-item{% if request.url.path == url_for('settings') %} selected{% endif %}">
+            <a href="{{ url_for('settings') }}">
+                <img src="{{ url_for('static', path='images/settings.png') }}" alt="Ayarlar" class="sidebar-icon"/>
+                Ayarlar
+            </a>
+        </li>
+        <li class="sidebar-item{% if request.url.path == url_for('about') %} selected{% endif %}">
+            <a href="{{ url_for('about') }}">
+                <img src="{{ url_for('static', path='images/info.png') }}" alt="Hakkında" class="sidebar-icon"/>
+                Hakkında
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="{{ url_for('auth_logout') }}">
+                <img src="{{ url_for('static', path='images/logout.png') }}" alt="Çıkış Yap" class="sidebar-icon"/>
+                Çıkış Yap
+            </a>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
 <main>
     {% block content %}{% endblock %}
 </main>
