@@ -102,6 +102,7 @@ button {
   border: 1px solid #132f33;
   border-radius: 5px;
   height: 25px;
+  width: -webkit-fill-available;
 }
 
 .login-options {
@@ -528,6 +529,13 @@ button {
 
 .task-complete-circle.completed {
   background-color: #102f33;
+}
+
+#register-form{
+  width: 430px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 

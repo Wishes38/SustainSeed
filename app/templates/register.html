@@ -3,34 +3,114 @@
 {% block title %}Kayıt Ol{% endblock %}
 
 {% block content %}
-  <h2>Kayıt Ol</h2>
-  <form id="register-form">
-    <label>Username:</label>
-    <input type="text" name="username" required />
+<div class="login-container">
+    <div class="login-max-content">
+        <div class="login-top-bar">
+            <img
+                    src="{{ url_for('static', path='images/leaves-icon.png') }}"
+                    alt="Leaf Icon"
+                    class="login-top-bar-icon"
+            />
+        </div>
 
-    <label>Email:</label>
-    <input type="email" name="email" required />
+        <div class="login-main-content">
+            <div class="login-left-panel">
+                <img
+                        src="{{ url_for('static', path='images/logo-sustain-seed-ai.png') }}"
+                        alt="Logo"
+                        class="login-left-logo"
+                />
+            </div>
 
-    <label>First Name:</label>
-    <input type="text" name="first_name" required />
+            <div class="login-card">
+                <img
+                        src="{{ url_for('static', path='images/leaves-icon.png') }}"
+                        alt="Leaf Icon"
+                        class="login-leaf-icon"
+                />
+                <h2 class="login-title">Kayıt Ol</h2>
+                <form id="register-form">
+                    <label class="login-label" for="first_name">Adınız</label>
+                    <input
+                            class="login-input"
+                            type="text"
+                            name="first_name"
+                            id="first_name"
+                            required
+                    />
 
-    <label>Last Name:</label>
-    <input type="text" name="last_name" required />
+                    <label class="login-label" for="last_name">Soyadınız</label>
+                    <input
+                            class="login-input"
+                            type="text"
+                            name="last_name"
+                            id="last_name"
+                            required
+                    />
 
-    <label>Password:</label>
-    <input type="password" name="password" required />
+                    <label class="login-label" for="username">Kullanıcı Adı</label>
+                    <input
+                            class="login-input"
+                            type="text"
+                            name="username"
+                            id="username"
+                            required
+                    />
 
-    <label>Role:</label>
-    <input type="text" name="role" value="user" required />
+                    <label class="login-label" for="email">E-posta</label>
+                    <input
+                            class="login-input"
+                            type="email"
+                            name="email"
+                            id="email"
+                            required
+                    />
 
-    <label>Phone Number:</label>
-    <input type="text" name="phone_number" required />
+                    <label class="login-label" for="password">Şifre</label>
+                    <input
+                            class="login-input"
+                            type="password"
+                            name="password"
+                            id="password"
+                            required
+                    />
 
-    <button type="submit">Kayıt Ol</button>
-  </form>
+                    <label class="login-label" for="role">Rol</label>
+                    <input
+                            class="login-input"
+                            type="text"
+                            name="role"
+                            id="role"
+                            value="user"
+                            required
+                    />
 
-  <p>Zaten hesabınız var mı? <a href="/auth/login">Giriş Yap</a></p>
-  <div id="register-msg"></div>
+                    <label class="login-label" for="phone_number">Telefon No</label>
+                    <input
+                            class="login-input"
+                            type="text"
+                            name="phone_number"
+                            id="phone_number"
+                            required
+                    />
 
-  <script src="{{ url_for('static', path='js/auth.js') }}"></script>
+                    <div id="register-msg" class="login-message"></div>
+
+                    <button type="submit" class="login-login-btn">Kayıt Ol</button>
+                    <button
+                            type="button"
+                            class="login-signup-btn"
+                            onclick="window.location.href='/auth/login'"
+                    >
+                        Giriş Yap
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="login-bottom-bar"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', path='js/auth.js') }}"></script>
 {% endblock %}
