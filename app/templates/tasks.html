@@ -1,6 +1,57 @@
 {% extends "base.html" %}
 {% block title %}Görevler{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/tasks.css') }}">
+{% endblock %}
 {% block content %}
-  <h1>Görevlerin</h1>
-  <!-- Görev listesi eklenecek -->
+<div class="tasks-wrapper">
+    <div class="sidebar-space"></div>
+    <div class="tasks-content">
+        <div class="tasks-top">
+            {# burayı ihtiyaca göre doldurabilirsiniz #}
+        </div>
+        <div class="tasks-main">
+            <div class="task-group">
+                <div class="task-group-header">
+                    <span class="task-group-icon">📋</span>
+                    <span class="task-group-title">Günlük Görevler</span>
+                </div>
+                <div class="task-group-body">
+                    {% for t in daily_tasks %}
+                    <label class="task-item">
+                        <input type="radio" {% if t.completed %}checked{% endif %} disabled>
+                        <div>
+                            <div class="task-title">Görev {{ loop.index }}</div>
+                            <div class="task-desc">{{ t.daily_task.title }}</div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# XPTree burada istediğiniz gibi embed edilebilir #}
+            <div class="xp-tree">
+                <img src="{{ url_for('static', path='images/trees/' ~ user.plant_stage ~ '.png') }}" alt="Tree">
+            </div>
+
+            <div class="task-group">
+                <div class="task-group-header">
+                    <span class="task-group-icon">📈</span>
+                    <span class="task-group-title">Eco-Actions</span>
+                </div>
+                <div class="task-group-body">
+                    {% for e in eco_tasks %}
+                    <label class="task-item">
+                        <input type="radio" {% if e.id in completed_eco_ids %}checked{% endif %} disabled>
+                        <div>
+                            <div class="task-title">Eco {{ loop.index }}</div>
+                            <div class="task-desc">{{ e.title }}</div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

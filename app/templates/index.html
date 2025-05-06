@@ -7,8 +7,9 @@
     <main class="hp-content">
         <div class="hp-xp-bar">
             <div class="hp-xp-fill" style="width: {{ user.percent }}%;"></div>
-            <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
         </div>
+        <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
+
 
         {% if user.xp < 10 %}
         {% set img_index = 1 %}
@@ -46,29 +47,42 @@
             />
         </div>
 
-        {% if user.xp >= 80 %}
-        <form method="post" action="{{ url_for('update_user_xp') }}?xp_amount=0" class="complete-form">
-            <button type="submit" class="complete-btn">Tamamla</button>
-        </form>
-        {% endif %}
-
-        <div class="hp-bottom-container">
-            <p class="hp-subtitle">
-                My photosynthesis is going great; turn off the light and I’ll really thrive.
-            </p>
-            <div class="hp-search">
-                <input type="text" placeholder="Little sprout, how are you today?"/>
-                <button>
-                    <img class="hp-search-send-icon" src="{{ url_for('static', path='images/send-icon.png') }}"
-                         alt="Gönder"/>
-                </button>
+        <div class="hp-boxes">
+            <div class="hp-total_earned_xp">
+                <h3 class="hp-total_earned_xp-title">Kazanılan Toplam XP</h3>
+                <p class="hp-total_earned_xp-value">{{ (user.tree_count * 80) + user.xp|round(1) }}</p>
             </div>
-            <button class="hp-take-mission">
-                <img class="hp-take-mission-img" src="{{ url_for('static', path='images/take-mission.png') }}"
-                     alt="Gorev Al"/>
-                <p class="hp-take-mission-label">Görev Al</p>
-            </button>
+            <div class="hp-tree_count">
+                <h3 class="hp-tree_count-title">Dikilen Toplam Ağaç</h3>
+                <p class="hp-tree_count-value">{{ user.tree_count }}</p>
+            </div>
         </div>
-    </main>
+        <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
+
+
+{% if user.xp >= 80 %}
+<form method="post" action="{{ url_for('update_user_xp') }}?xp_amount=0" class="complete-form">
+    <button type="submit" class="complete-btn">Tamamla</button>
+</form>
+{% endif %}
+
+<div class="hp-bottom-container">
+    <p class="hp-subtitle">
+         Fotosentezim harika gidiyor; ışığı kapatınca daha da iyi olacağım.
+    </p>
+    <div class="hp-search">
+        <input type="text" placeholder="Minik filiz, bugün nasılsın?"/>
+        <button>
+            <img class="hp-search-send-icon" src="{{ url_for('static', path='images/send-icon.png') }}"
+                 alt="Gönder"/>
+        </button>
+    </div>
+    <button class="hp-take-mission">
+        <img class="hp-take-mission-img" src="{{ url_for('static', path='images/take-mission.png') }}"
+             alt="Gorev Al"/>
+        <p class="hp-take-mission-label">Görev Al</p>
+    </button>
+</div>
+</main>
 </div>
 {% endblock %}
