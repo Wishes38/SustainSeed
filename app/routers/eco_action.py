@@ -7,7 +7,8 @@ from app.schemas import EcoActionCreate, EcoActionRead
 from app.core.auth import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
 from app.crud import eco_action as eco_action_crud
-
+from app.crud.eco_action import create_eco_action, get_eco_actions_by_user, complete_eco_action, uncomplete_eco_action
+from typing import Annotated
 
 router = APIRouter(
     prefix="/eco-actions",
@@ -26,16 +27,20 @@ def get_db():
 
 
 @router.post("/", response_model=EcoActionRead)
+@router.post("/", response_model=EcoActionRead)
+
+@router.post("/", response_model=EcoActionRead)
 def create_action(
-        action_data: EcoActionCreate,
-        token: str = Depends(oauth2_scheme),
-        db: Session = Depends(get_db)
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
-    if not user_data or "id" not in user_data:
+    user_id = user_data.get("id")
+    if not user_id:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-    return eco_action_crud.create_eco_action(db, user_id=user_data["id"], action_data=action_data)
+    new_action = create_eco_action(db, user_id=user_id)
+    return new_action
 
 
 @router.get("/", response_model=List[EcoActionRead])
@@ -52,28 +57,29 @@ def get_my_eco_actions(
 
 @router.post("/{eco_action_id}/complete")
 def complete_eco(
-    eco_action_id: int,
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+        eco_action_id: int,
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
-    user_id   = user_data.get("id")
-    success   = eco_action_crud.complete_eco_action(db, user_id, eco_action_id)
+    user_id = user_data.get("id")
+    success = eco_action_crud.complete_eco_action(db, user_id, eco_action_id)
     if not success:
         raise HTTPException(404, "Eco-action not found or already completed")
     user = db.query(User).get(user_id)
     percent = min(user.xp / 80 * 100, 100)
     return {"completed": True, "new_xp": user.xp, "percent": percent}
 
+
 @router.post("/{eco_action_id}/uncomplete")
 def uncomplete_eco(
-    eco_action_id: int,
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+        eco_action_id: int,
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
-    user_id   = user_data.get("id")
-    success   = eco_action_crud.uncomplete_eco_action(db, user_id, eco_action_id)
+    user_id = user_data.get("id")
+    success = eco_action_crud.uncomplete_eco_action(db, user_id, eco_action_id)
     if not success:
         raise HTTPException(400, "Cannot uncomplete this eco-action")
     user = db.query(User).get(user_id)

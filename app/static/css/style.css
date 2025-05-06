@@ -618,4 +618,21 @@ button {
   text-align: justify;
 }
 
+.eco-action-display {
+  margin-top: 20px;
+  padding: 16px;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+}
+
+.eco-action-display h4 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  color: #2e7d32;
+}
+
+.eco-action-display p {
+  margin: 4px 0;
+}
 

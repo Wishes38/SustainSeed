@@ -38,12 +38,10 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 @app.get("/")
 async def home(request: Request, db: Session = Depends(get_db)):
-    # 1) Cookie’den token
     token = request.cookies.get("access_token")
     if not token:
         return RedirectResponse(url="/auth/login")
 
-    # 2) Decode & kullanıcı yükle
     try:
         payload = decode_access_token(token)
         user_id = payload.get("id")
@@ -53,7 +51,6 @@ async def home(request: Request, db: Session = Depends(get_db)):
     except Exception:
         return RedirectResponse(url="/auth/login")
 
-    # 3) xp yüzdesi (0–80 aralığında kalacak şekilde)
     xp_for_stage = user.xp % 80
     xp_percent = round(xp_for_stage / 80 * 100)
 

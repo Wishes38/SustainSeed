@@ -59,23 +59,41 @@
         </div>
         <span class="hp-xp-label">{{ user.xp|round(1) }} XP</span>
 
-<div class="hp-bottom-container">
-    <p class="hp-subtitle">
-         Fotosentezim harika gidiyor; ışığı kapatınca daha da iyi olacağım.
-    </p>
-    <div class="hp-search">
-        <input type="text" placeholder="Minik filiz, bugün nasılsın?"/>
-        <button>
-            <img class="hp-search-send-icon" src="{{ url_for('static', path='images/send-icon.png') }}"
-                 alt="Gönder"/>
-        </button>
-    </div>
-    <button class="hp-take-mission">
-        <img class="hp-take-mission-img" src="{{ url_for('static', path='images/take-mission.png') }}"
-             alt="Gorev Al"/>
-        <p class="hp-take-mission-label">Görev Al</p>
-    </button>
-</div>
-</main>
+        <div class="hp-bottom-container">
+            <!-- Burayı id verdik -->
+            <p class="hp-subtitle" id="hp-subtitle">
+                Fotosentezim harika gidiyor; ışığı kapatınca daha da iyi olacağım.
+            </p>
+
+            <!-- Chat formu -->
+            <form id="chat-form" class="hp-search">
+                <input
+                        type="text"
+                        id="chat-input"
+                        placeholder="Minik filiz, bugün nasılsın?"
+                        autocomplete="off"
+                />
+                <button type="submit" id="chat-send-button">
+                    <img class="hp-search-send-icon"
+                         src="{{ url_for('static', path='images/send-icon.png') }}"
+                         alt="Gönder"/>
+                </button>
+            </form>
+
+            <button id="take-mission-btn" class="hp-take-mission">
+                <img class="hp-take-mission-img"
+                     src="{{ url_for('static', path='images/take-mission.png') }}"
+                     alt="Gorev Al"/>
+                <p class="hp-take-mission-label">Görev Al</p>
+            </button>
+
+        </div>
+    </main>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', path='js/chat.js') }}"></script>
+  <script src="{{ url_for('static', path='js/tasks.js') }}"></script>
+{% endblock %}
+
