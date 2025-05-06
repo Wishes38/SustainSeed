@@ -3,19 +3,61 @@
 {% block title %}Giriş Yap{% endblock %}
 
 {% block content %}
-  <h2>Giriş Yap</h2>
-  <form id="login-form">
-    <label>Username:</label>
-    <input type="text" name="username" required />
+<div class="login-container">
 
-    <label>Password:</label>
-    <input type="password" name="password" required />
+    <div class="login-max-content">
+        <div class="login-top-bar">
+            <img src="{{ url_for('static', path='images/leaves-icon.png') }}"
+                 alt="Leaf Icon"
+                 class="login-top-bar-icon"/>
+        </div>
 
-    <button type="submit">Giriş Yap</button>
-  </form>
 
-  <p>Hesabın yok mu? <a href="/auth/register">Kayıt Ol</a></p>
-  <div id="login-msg"></div>
+        <div class="login-main-content">
 
-  <script src="{{ url_for('static', path='js/auth.js') }}"></script>
+            <div class="login-left-panel">
+                <img src="{{ url_for('static', path='images/logo-sustain-seed-ai.png') }}"
+                     alt="Logo"
+                     class="login-left-logo"/>
+            </div>
+
+
+            <div class="login-card">
+                <img src="{{ url_for('static', path='images/leaves-icon.png') }}"
+                     alt="Leaf Icon"
+                     class="login-leaf-icon"/>
+                <h2 class="login-title">Giriş Yap</h2>
+                <form id="login-form">
+                    <label class="login-label" for="username">Kullanıcı Adı</label>
+                    <input class="login-input" type="text" name="username" id="username" required/>
+
+                    <label class="login-label" for="password">Şifre</label>
+                    <input class="login-input" type="password" name="password" id="password" required/>
+
+                    <div class="login-options">
+                        <a href="/auth/forgot-password" class="login-forgot-link">Şifremi unuttum</a>
+                        <div class="login-remember-me">
+                            <input type="checkbox" id="remember"/>
+                            <label class="login-remember-me-label" for="remember">Beni hatırla</label>
+                        </div>
+                    </div>
+
+                    <div id="login-msg" class="login-message"></div>
+
+                    <button type="submit" class="login-login-btn">Giriş Yap</button>
+                    <button type="button"
+                            class="login-signup-btn"
+                            onclick="window.location.href='/auth/register'">
+                        Kayıt Ol
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="login-bottom-bar"></div>
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', path='js/auth.js') }}"></script>
 {% endblock %}
