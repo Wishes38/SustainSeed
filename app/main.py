@@ -13,6 +13,7 @@ from app.core.auth import decode_access_token
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.routers.home import router as home_router
+from app.routers.logs import router as logs_router
 
 templates = Jinja2Templates(directory="app/templates")
 
@@ -71,5 +72,6 @@ app.include_router(auth_router)
 app.include_router(home_router)
 app.include_router(eco_action_router)
 app.include_router(daily_task_router)
+app.include_router(logs_router)
 
 Base.metadata.create_all(bind=engine)

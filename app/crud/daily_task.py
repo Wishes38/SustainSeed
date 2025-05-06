@@ -79,3 +79,24 @@ def complete_task(db: Session, assignment_id: int, user_id: int):
         return assignment
 
     return None
+
+
+def uncomplete_task(db: Session, assignment_id: int, user_id: int):
+    assignment = db.query(UserDailyTaskAssignment)\
+        .filter_by(id=assignment_id, user_id=user_id)\
+        .first()
+
+    if assignment and assignment.completed:
+        assignment.completed = False
+
+        task = db.query(DailyTask).get(assignment.daily_task_id)
+        user = db.query(User).get(user_id)
+        if task and user:
+            user.xp = max(user.xp - task.xp_earned, 0)
+            user.update_plant_stage()
+
+        db.commit()
+        db.refresh(assignment)
+        return assignment
+
+    return None

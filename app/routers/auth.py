@@ -71,7 +71,6 @@ def register_user(user_data: CreateUserRequest, db: db_dependency):
     return {"message": "User registered successfully."}
 
 
-# === Login ===
 @router.post("/login", response_model=Token)
 def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
     user = db.query(User).filter(User.username == form_data.username).first()
@@ -86,7 +85,6 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     return {"access_token": token, "token_type": "bearer"}
 
 
-# === Get Current User Info ===
 @router.get("/me", response_model=UserRead)
 def get_current_user_info(token: Annotated[str, Depends(oauth2_scheme)], db: db_dependency):
     payload = decode_access_token(token)
@@ -96,7 +94,6 @@ def get_current_user_info(token: Annotated[str, Depends(oauth2_scheme)], db: db_
     return user
 
 
-# === Update Current User Info ===
 @router.put("/me", response_model=UserRead)
 def update_current_user_info(
         user_update: UserUpdate,
@@ -115,7 +112,6 @@ def update_current_user_info(
     return user
 
 
-# === Delete Current User ===
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
 def delete_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: db_dependency):
     payload = decode_access_token(token)

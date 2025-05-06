@@ -94,3 +94,13 @@ class AssignmentRead(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UserTaskLogRead(BaseModel):
+    id: int
+    user_id: int
+    eco_action_id: int
+    completed: bool
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

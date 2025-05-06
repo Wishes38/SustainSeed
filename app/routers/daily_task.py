@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
+from app.models import User
 from app.schemas import *
 from app.core.auth import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
@@ -8,6 +9,7 @@ from app.crud import daily_task as crud
 
 router = APIRouter(prefix="/daily-tasks", tags=["Daily Tasks"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
 
 def get_db():
     db = SessionLocal()
@@ -62,3 +64,16 @@ def complete_assignment(assignment_id: int, token: str = Depends(oauth2_scheme),
     if not result:
         raise HTTPException(status_code=404, detail="Assignment not found")
     return result
+
+
+@router.post("/uncomplete/{assignment_id}")
+def uncomplete_assignment(assignment_id: int, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    user_data = decode_access_token(token)
+    user_id = user_data.get("id")
+    assignment = crud.uncomplete_task(db, assignment_id, user_id)
+    if not assignment:
+        raise HTTPException(400, "Cannot uncomplete this assignment")
+
+    user = db.query(User).get(user_id)
+    percent = min(user.xp / 80 * 100, 100)
+    return {"completed": assignment.completed, "new_xp": user.xp, "percent": percent}

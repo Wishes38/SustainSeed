@@ -2,10 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import SessionLocal
+from app.models import User
 from app.schemas import EcoActionCreate, EcoActionRead
 from app.core.auth import decode_access_token
 from fastapi.security import OAuth2PasswordBearer
 from app.crud import eco_action as eco_action_crud
+
 
 router = APIRouter(
     prefix="/eco-actions",
@@ -49,17 +51,31 @@ def get_my_eco_actions(
 
 
 @router.post("/{eco_action_id}/complete")
-def complete_eco_action(
-        eco_action_id: int,
-        token: str = Depends(oauth2_scheme),
-        db: Session = Depends(get_db)
+def complete_eco(
+    eco_action_id: int,
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
 ):
     user_data = decode_access_token(token)
-    if not user_data or "id" not in user_data:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
-    success = eco_action_crud.complete_eco_action(db, user_id=user_data["id"], eco_action_id=eco_action_id)
+    user_id   = user_data.get("id")
+    success   = eco_action_crud.complete_eco_action(db, user_id, eco_action_id)
     if not success:
-        raise HTTPException(status_code=404, detail="Task not found or already completed")
+        raise HTTPException(404, "Eco-action not found or already completed")
+    user = db.query(User).get(user_id)
+    percent = min(user.xp / 80 * 100, 100)
+    return {"completed": True, "new_xp": user.xp, "percent": percent}
 
-    return {"message": "Eco action marked as completed and XP awarded"}
+@router.post("/{eco_action_id}/uncomplete")
+def uncomplete_eco(
+    eco_action_id: int,
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+):
+    user_data = decode_access_token(token)
+    user_id   = user_data.get("id")
+    success   = eco_action_crud.uncomplete_eco_action(db, user_id, eco_action_id)
+    if not success:
+        raise HTTPException(400, "Cannot uncomplete this eco-action")
+    user = db.query(User).get(user_id)
+    percent = min(user.xp / 80 * 100, 100)
+    return {"completed": False, "new_xp": user.xp, "percent": percent}
