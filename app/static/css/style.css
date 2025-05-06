@@ -15,9 +15,6 @@ a {
 
 button {
   cursor: pointer;
-  background-color: #27ae60;
-  color: white;
-  border: none;
 }
 
 /* ─── Login Sayfası ─── */
@@ -245,6 +242,7 @@ button {
   display: flex;
   margin-left: 315px;
   height: 100vh;
+  background: #fffffa;
 }
 
 .hp-content {
@@ -253,6 +251,10 @@ button {
   padding: 40px;
   text-align: center;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
 }
 
 .hp-xp-bar {
@@ -283,14 +285,22 @@ button {
   max-height: 300px;
 }
 
+.hp-bottom-container{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
 .hp-subtitle {
   margin-top: 16px;
   color: #888;
   font-size: 1rem;
+  text-align: start;
+  margin: 20px 15px 10px 15px;
 }
 
 .hp-search {
-  margin-top: 16px;
+  margin-top: 5px;
   display: inline-flex;
   background: #ececec;
   border-radius: 24px;
@@ -303,6 +313,7 @@ button {
   outline: none;
   padding: 8px;
   font-size: 1rem;
+  flex: 1;
 }
 
 .hp-search button {
@@ -310,4 +321,33 @@ button {
   background: transparent;
   font-size: 1.2rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.hp-search-send-icon{
+  height: 30px;
+}
+
+.hp-take-mission{
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 1px 10px;
+  margin-top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  gap: 5px;
+  background: unset;
+}
+
+.hp-take-mission-img{
+  height: 24px;
+}
+
+.hp-take-mission-label{
+  color: black;
+  opacity: 0.5;
+  margin: 0;
+  font-size: 1.2em;
 }
