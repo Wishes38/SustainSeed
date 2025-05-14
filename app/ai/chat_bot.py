@@ -425,7 +425,7 @@ class Chat:
         print(response.text)
 
         if response.text == "Sohbet":
-            if len(self.chat_log_bot) == 6:
+            if len(self.chat_log_bot) =>6:
                 prompt = self.player_plane_level_prompts[str(player_plane_level)] + self.user_connect_prompt.format(
                     user_input) + self.chat_memory_prompt6.format(self.chat_log_bot[-6], self.chat_log_bot[-5],
                                                                   self.chat_log_bot[-4], self.chat_log_bot[-3],
