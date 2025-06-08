@@ -35,7 +35,7 @@ Gelecekte dijital ormandaki her ağaç, gerçek hayatta da bir fidana dönüşec
 ## Teknik Yığın
 Backend   : FastAPI · Python 3.12 · SQLAlchemy 2 · Alembic · JWT  
 AI        : Google Generative AI (Gemini Flash-2.5)  
-Frontend  : React 18 + Vite · Jinja2 (SSR) · HTML/CSS/JS  
+Frontend  : HTML/CSS/JS · Jinja2 (SSR)  
 Veritabanı: PostgreSQL 16 (Docker)  
 DevOps    : Docker Compose · GitHub Actions CI · pre-commit (ruff, black)  
 Tasarım   : Adobe Illustrator · After Effects
