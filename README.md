@@ -155,17 +155,16 @@ plant_stage = Seed
 `````
 
 
-## Ekran Görüntüleri
+| Akış / Sayfa | Görsel |
+|--------------|--------|
+| Giriş Ekranı | <img src="https://github.com/user-attachments/assets/66766b70-1263-4a49-acee-177b286aa9b6?raw=true" width="750"/> |
+| Kayıt Ekranı | <img src="https://github.com/user-attachments/assets/4da86a46-f647-4426-8282-f7d08ca03a87?raw=true" width="750"/> |
+| Bitki Sohbeti – Tohum | <img src="https://github.com/user-attachments/assets/5f0eaae4-d686-49c7-9d09-91f8004c09ca?raw=true" width="750"/> |
+| Bitki Sohbeti – Fidan | <img src="https://github.com/user-attachments/assets/76e0d51d-26e5-435c-8a97-6d1130bf797d?raw=true" width="750"/> |
+| Bitki Sohbeti – Ağaç | <img src="https://github.com/user-attachments/assets/cbc412ac-cf7b-4645-9d30-3772b213a8b3?raw=true" width="750"/> |
+| Günlük Görevler & Eco Actions | <img src="https://github.com/user-attachments/assets/797b6762-1391-4700-aa42-619b01e2d21c?raw=true" width="750"/> |
+| Profil Sayfası | <img src="https://github.com/user-attachments/assets/6e8e6644-c973-449e-9402-acaabc2fb57c?raw=true" width="750"/> |
 
-| Akış / Sayfa                  | Görsel                                             |
-| ----------------------------- | -------------------------------------------------- |
-| Giriş Ekranı                  | ![login](docs/screens/login.png)                   |
-| Kayıt Ekranı                  | ![register](docs/screens/register.png)             |
-| Bitki Sohbeti – Tohum (Seed)  | ![chat-seed](docs/screens/chat_seed.png)           |
-| Bitki Sohbeti – Fidan (Seedling) | ![chat-seedling](docs/screens/chat_seedling.png) |
-| Bitki Sohbeti – Ağaç (Growing)   | ![chat-tree](docs/screens/chat_tree.png)          |
-| Günlük Görevler & Eco Actions | ![tasks](docs/screens/daily_tasks.png)             |
-| Profil Sayfası                | ![profile](docs/screens/profile.png)               |
 
 
 
